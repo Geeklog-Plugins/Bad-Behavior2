@@ -1,0 +1,139 @@
+Bad Behavior2 Plugin v2.0.23 for Geeklog v1.4.1 and later
+ - Bad Behavior 2 is Copyright (c) 2005-2008 Michael Hampton.
+                                             All rights reserved.
+   Original Geeklog Plugin by Dirk Haun
+   Bad Behavior2 Plugin Upgrade by Mark R. Evans
+
+Bad Behavior complements other link spam solutions by acting as a gatekeeper,
+preventing spammers from ever delivering their junk, and in many cases, from
+ever reading your site in the first place. This keeps your site's load down,
+makes your site logs cleaner, and can help prevent denial of service
+conditions caused by spammers.
+(quoted from <http://www.bad-behavior.ioerror.us/>)
+
+INSTALLATION
+
+(For upgrading instructions, see below)
+
+With one exception (see step 5), this plugin installs like any other Geeklog
+plugin:
+
+1) Unpack bad_behavior2_2.0.23-1.4.1.tar.gz
+2) Upload the contents of the public_html directory into
+   /path/to/geeklog/public_html/bad_behavior2
+3) Upload the contents of the admin directory into
+   /path/to/geeklog/public_html/admin/plugins/bad_behavior2
+4) Upload the functions.inc file and language directory into
+   /path/to/geeklog/plugins/bad_behavior2
+
+***** IMPORTANT! EXTRA STEP FOR THIS PLUGIN *****
+
+5) Edit your lib-common.php file. Find the line where the lib-database.php is
+   included:
+
+   require_once( $_CONF['path_system'] . 'lib-database.php' );
+
+   AFTER that line, add:
+
+   require_once($_CONF['path_html'] . 'bad_behavior2/bad-behavior-geeklog.php');
+
+6) Log in as the Admin, select "Plugins" from the Admin block and click on
+   "Install" for the bad_behavior2 plugin
+
+If you need help with installing a Geeklog plugin, start here:
+<http://www.geeklog.net/forum/viewtopic.php?showtopic=39765>
+
+
+UPGRADING
+
+If you are upgrading from v1.2.4-1 you must first uninstall the existing
+plugin before you install v2.0.23.
+
+  - Perform a standard plugin uninstall - Plugins -> Bad Behavior - Delete
+  - Do not forget to remove the Bad Behavior 1 lib-common.php entry
+  - Do not forget to remove the Bad Behavior 1 Spam-X module
+       Remove /path/to/geeklog/plugins/spamx/BadBehavior.Action.class.php
+       Subtract the value of 64 from the entry in $_CONF['spamx'] in
+          Geeklog's main config.php file.
+
+Upgrading from earlier 2.0.x releases
+
+If you were running an earlier version of Bad Behavior 2 before, you need to
+replace the contents of the bad_behavior2 directory (in your site's public_html
+directory) with the contents of the included public_html directory. Make sure
+to replace all the files in all the subdirectories there!
+
+The other file you should replace is the plugin's functions.inc file.
+
+Once you've done that, log into your site as an Admin user, and select
+"Plugins". The entry for the Bad Behavior plugin should report the need to
+update the plugin. Do that by clicking on the "edit" icon for that plugin,
+and then select "Update". That concludes the update process.
+
+
+CONFIGURATION
+
+There is only one configuration option with Bad Behavior2, the 'strict' option.
+
+To change the configuration option, you will need to edit the file
+
+    public_html/bad_behavior2/bad-behavior-geeklog.php
+
+Near the top you will see:
+
+    $bb2_settings_defaults = array(
+    	'log_table'     => $_DB_table_prefix . 'bad_behavior2',
+    	'display_stats' => true,
+    	'strict'        => false,
+    	'verbose'       => false
+    );
+
+The only option you should change is the 'strict' option.
+
+strict: Enables strict mode blocking. When turned on, certain types of
+        spam will be blocked, but legitimate corporate and government users
+        may also be blocked. This is off by default.
+
+Spam-X module
+
+This version of Bad Behavior does not include the Spam-X module.
+Bad Behavior2 no longer bans by IP, instead it checks each HTTP request, so
+the Spam-X module is no longer useful since IPs are no longer banned.
+
+Searching
+
+Users in the Bad Behavior2 Admin group can search the Bad Behavior2 logs.
+Simply go to Geeklog's search page and enter your search terms. Select
+"Bad Behavior2" from the "Type" drop-down menu if you only want to perform a
+search on the Bad Behavior2 logs.
+
+The search function will search for IP addresses and it also searches through
+the entire HTTP request that the offender used to access the site.
+
+Stats
+
+Bad Behavior2 also displays a section in your site's statistics. In addition
+to the total number of blocked requests, it also displays a list of the most
+common misbehaviors. These statistics are only visible to members of the
+'Bad Behavior2 Admin' group.
+
+Changes
+
+For a list of changes in Bad Behavior 2, please see Michael Hampton's website:
+http://www.bad-behavior.ioerror.us/
+
+Credits
+
+Bad Behavior was written by Michael Hampton.
+
+This Geeklog plugin provides a wrapper around Michael's plugin and adds
+a few Geeklog-specific extras, e.g. the ability to view the blocked requests
+and to search through the list of blocked requests.
+
+Copyright
+
+Bad Behavior is (c) 2005-2008 by Michael Hampton and released under the GPL
+The Geeklog plugin is (c) 2005-2008 Dirk Haun and also released under the GPL
+Original upgrade to Bad Behavior v2.0.x by Mark Evans - GPL'ed of couse...
+
+Please see the included file COPYING (in public_html) for license details.
