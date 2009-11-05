@@ -1,4 +1,4 @@
-Bad Behavior2 Plugin v2.0.31 for Geeklog v1.4.1 and later
+Bad Behavior2 Plugin v2.0.32 for Geeklog v1.4.1 and later
  - Bad Behavior 2 is Copyright (c) 2005-2009 Michael Hampton.
                                              All rights reserved.
    Original Geeklog Plugin by Dirk Haun
@@ -18,7 +18,7 @@ INSTALLATION
 With one exception (see step 5), this plugin installs like any other Geeklog
 plugin:
 
-1) Unpack bad_behavior2_2.0.31-1.4.1.tar.gz
+1) Unpack bad_behavior2_2.0.32-1.4.1.tar.gz
 2) Upload the contents of the public_html directory into
    /path/to/geeklog/public_html/bad_behavior2
 3) Upload the contents of the admin directory into
@@ -37,6 +37,17 @@ plugin:
 
    require_once($_CONF['path_html'] . 'bad_behavior2/bad-behavior-geeklog.php');
 
+   Note: As of Geeklog 1.6.1, the include for lib-database.php is done by the
+   config class, so you won't find the above line any more. A good place for
+   the bad_behavior2 include would be just before where we set the webserver's
+   timezone:
+
+   require_once $_CONF['path_html'] . 'bad_behavior2/bad-behavior-geeklog.php'; 
+
+   /**
+   * Set the webserver's timezone
+   */
+
 6) Log in as the Admin, select "Plugins" from the Admin block and click on
    "Install" for the bad_behavior2 plugin
 
@@ -47,7 +58,7 @@ If you need help with installing a Geeklog plugin, start here:
 UPGRADING
 
 If you are upgrading from v1.2.4-1 you must first uninstall the existing
-plugin before you install v2.0.31.
+plugin before you install v2.0.32.
 
   - Perform a standard plugin uninstall - Plugins -> Bad Behavior - Delete
   - Do not forget to remove the Bad Behavior 1 lib-common.php entry
