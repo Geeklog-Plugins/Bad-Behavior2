@@ -1,17 +1,17 @@
 <?php
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Bad Behavior plugin 2.0.13 for Geeklog 1.4.x                              |
+// | Bad Behavior plugin 2.0.x for Geeklog 1.4.1 and later                     |
 // +---------------------------------------------------------------------------+
 // | functions.inc                                                             |
 // |                                                                           |
 // | Implementation of the Geeklog Plugin API                                  |
 // +---------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                   |
-// | Copyright (C) 2005-2007 Michael Hampton                                   |
+// | Copyright (C) 2005-2009 Michael Hampton                                   |
 // +---------------------------------------------------------------------------+
 // | Geeklog plugin wrapper                                                    |
-// | Copyright (C) 2005-2007 Dirk Haun <dirk AT haun-online DOT de>            |
+// | Copyright (C) 2005-2009 Dirk Haun <dirk AT haun-online DOT de>            |
 // | Bad Behavior 2.0.13 wrapper upgrades                                      |
 // | Copyright (c) 2007 Mark R. Evans <mark AT gllabs DOT org>                 |
 // +---------------------------------------------------------------------------+
@@ -31,11 +31,9 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
 // |                                                                           |
 // +---------------------------------------------------------------------------+
-//
 
-if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
-{
-    die ('This file can not be used on its own.');
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'functions.inc') !== false) {
+    die('This file can not be used on its own.');
 }
 
 if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
@@ -121,16 +119,93 @@ function plugin_searchtypes_bad_behavior2 ()
 {
     global $LANG_BAD_BEHAVIOR;
 
-    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head')) {
-        $tmp['bad_behavior'] = $LANG_BAD_BEHAVIOR['plugin_display_name'];
+    if (SEC_inGroup('Bad Behavior2 Admin') &&
+            function_exists('bb2_insert_head')) {
+        $tmp['bad_behavior2'] = $LANG_BAD_BEHAVIOR['plugin_display_name'];
 
         return $tmp;
-    } else {
-        return array ();
     }
+
+    return array();
 }
 
-function plugin_dopluginsearch_bad_behavior2 ($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page = -1, $perpage = -1)
+function plugin_dopluginsearch_bad_behavior2($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    if (class_exists('SearchCriteria')) {
+        return plugin_dopluginsearch_bad_behavior2_new($query, $datestart,
+                $dateend, $topic, $type, $author, $keyType, $page, $perpage);
+    }
+
+    return plugin_dopluginsearch_bad_behavior2_old($query, $datestart,
+                $dateend, $topic, $type, $author, $keyType, $page, $perpage);
+}
+
+/**
+* Search function for Geeklog 1.6.0 and later
+*/
+function plugin_dopluginsearch_bad_behavior2_new($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page = -1, $perpage = -1)
+{
+    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
+
+    $query = addslashes(trim($query));
+
+    if (empty($type)) {
+        $type = 'all';
+    }
+
+    // Bail if we aren't supppose to do our search
+    if (!SEC_inGroup('Bad Behavior2 Admin') ||
+            (($type != 'all') && ($type != 'bad_behavior2'))) {
+        return;
+    }
+
+    // do empty queries (i.e. return everything) only when explicitly
+    // searching for Bad Behavior
+    if (empty($query) && ($type != 'bad_behavior2')) {
+        return;
+    }
+
+    // Build search SQL
+    $sql = 'SELECT id, ip AS title, UNIX_TIMESTAMP(date) AS date, http_headers AS description, `key`, ';
+    $sql .= "CONCAT('{$_CONF['site_admin_url']}/plugins/bad_behavior2/index.php?mode=view&amp;id=',id) AS url ";
+    $sql .= 'FROM ' . WP_BB_LOG . ' WHERE 1=1 ';
+
+    if (!empty($datestart) && !empty($dateend)) {
+        $delim = substr($datestart, 4, 1);
+        $DS = explode($delim,$datestart);
+        $DE = explode($delim,$dateend);
+        $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+        $enddate = mktime(0,0,0,$DE[1],$DE[2],$DE[0]) + 3600;
+        $sql .= "AND (date BETWEEN '$startdate' AND '$enddate') ";
+    }
+
+    // Create a SearchCriteria instance with the name of the plugin
+    $search = new SearchCriteria('bad_behavior2',
+                                 $LANG_BAD_BEHAVIOR['results']);
+
+    // These are the columns in the table that need searching
+    $columns = array('title' => 'ip', 'http_headers');
+
+    // Get back the completed SQL query
+    list($sql, $ftsql) = $search->buildSearchSQL($keyType, $query, $columns,
+                                                 $sql);
+
+    // Set the Std. SQL Query
+    $search->setSQL($sql);
+
+    // Set the Full-Text Query, remember the columns _MUST_ be indexed first.
+    // If they are not then don't set this.
+    $search->setFTSQL($ftsql);
+
+    $search->setRank(2);
+
+    return $search;
+}
+
+/**
+* Search function for Geeklog versions prior to 1.6.0
+*/
+function plugin_dopluginsearch_bad_behavior2_old($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page = -1, $perpage = -1)
 {
     global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
 
