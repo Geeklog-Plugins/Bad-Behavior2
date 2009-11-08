@@ -41,6 +41,7 @@ $bb2_settings_defaults = array(
     'httpbl_key' => '',
     'httpbl_threat' => '25',
     'httpbl_maxage' => '30',
+    'offsite_forms' => false
 );
 
 // Bad Behavior callback functions.
@@ -101,14 +102,9 @@ function bb2_read_settings() {
 
     $isInstalled   = DB_getItem($_TABLES['vars'],'value','name="bb2_installed"');
 
-    return array('log_table'      => $bb2_settings_defaults['log_table'],
-			     'display_stats'  => $bb2_settings_defaults['display_stats'],
-			     'verbose'        => $bb2_settings_defaults['verbose'],
-			     'logging'        => $bb2_settings_defaults['logging'],
-			     'httpbl_key'     => $bb2_settings_defaults['httpbl_key'],
-			     'httpbl_threat'  => $bb2_settings_defaults['httpbl_threat'],
-			     'httpbl_maxage'  => $bb2_settings_defaults['httpbl_maxage'],
-			     'is_installed'   => $isInstalled );
+    return array_merge($bb2_settings_defaults,
+                       array('is_installed' => $isInstalled)
+                      );
 }
 
 // write settings to database
