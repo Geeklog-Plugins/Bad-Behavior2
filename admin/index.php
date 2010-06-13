@@ -12,7 +12,7 @@
 // | Copyright (C) 2005-2007 Michael Hampton                                   |
 // +---------------------------------------------------------------------------+
 // | Geeklog plugin wrapper                                                    |
-// | Copyright (C) 2005-2007 Dirk Haun <dirk AT haun-online DOT de>            |
+// | Copyright (C) 2005-2010 Dirk Haun <dirk AT haun-online DOT de>            |
 // | Bad Behavior 2.0.10 wrapper upgrades                                      |
 // | Copyright (c) 2007 Mark R. Evans <mark AT gllabs DOT org>                 |
 // +---------------------------------------------------------------------------+
@@ -245,7 +245,7 @@ function viewEntry ($id, $page = 1)
 }
 
 // MAIN
-$rightblocks = false;
+$rightblocks = -1;
 $display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
 
 $mode = COM_applyFilter ($_GET['mode']);
