@@ -166,7 +166,7 @@ function plugin_dopluginsearch_bad_behavior2_new($query, $datestart, $dateend, $
     }
 
     // Build search SQL
-    $sql = 'SELECT id, ip AS title, UNIX_TIMESTAMP(date) AS date, http_headers AS description, `key`, ';
+    $sql = 'SELECT id, ip AS title, UNIX_TIMESTAMP(date) AS date, http_headers AS description, 0 AS hits, `key`, ';
     $sql .= "CONCAT('{$_CONF['site_admin_url']}/plugins/bad_behavior2/index.php?mode=view&amp;id=',id) AS url ";
     $sql .= 'FROM ' . WP_BB_LOG . ' WHERE 1=1 ';
 
