@@ -1,5 +1,5 @@
-Bad Behavior2 Plugin v2.0.43 for Geeklog v1.4.1 and later
- - Bad Behavior 2 is Copyright (c) 2005-2011 Michael Hampton.
+Bad Behavior2 Plugin v2.0.46 for Geeklog v1.4.1 and later
+ - Bad Behavior 2 is Copyright (c) 2005-2012 Michael Hampton.
                                              All rights reserved.
    Original Geeklog Plugin by Dirk Haun
    Bad Behavior2 Plugin Upgrade by Mark R. Evans
@@ -18,7 +18,7 @@ INSTALLATION
 With one exception (see step 5), this plugin installs like any other Geeklog
 plugin:
 
-1) Unpack bad_behavior2_2.0.43-1.4.1.tar.gz
+1) Unpack bad_behavior2_2.0.46-1.4.1.tar.gz
 2) Upload the contents of the public_html directory into
    /path/to/geeklog/public_html/bad_behavior2
 3) Upload the contents of the admin directory into
@@ -58,7 +58,7 @@ If you need help with installing a Geeklog plugin, start here:
 UPGRADING
 
 If you are upgrading from v1.2.4-1 you must first uninstall the existing
-plugin before you install v2.0.43.
+plugin before you install v2.0.46.
 
   - Perform a standard plugin uninstall - Plugins -> Bad Behavior - Delete
   - Do not forget to remove the Bad Behavior 1 lib-common.php entry
@@ -143,8 +143,8 @@ and to search through the list of blocked requests.
 
 Copyright
 
-Bad Behavior is (c) 2005-2011 by Michael Hampton and released under the GPL
-The Geeklog plugin is (c) 2005-2011 Dirk Haun and also released under the GPL
+Bad Behavior is (c) 2005-2012 by Michael Hampton and released under the GPL
+The Geeklog plugin is (c) 2005-2012 Dirk Haun and also released under the GPL
 Original upgrade to Bad Behavior v2.0.x by Mark Evans - GPL'ed of course...
 
 Please see the included file gpl-2.0.txt (in public_html) for license details.
